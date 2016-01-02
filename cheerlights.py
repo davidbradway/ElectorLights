@@ -80,6 +80,18 @@ def theaterChaseRainbow(strip, wait_ms=50):
             for i in range(0, strip.numPixels(), 3):
                 strip.setPixelColor(i+q, 0)
 
+def historyChase(strip, light_history, wait_ms=50):
+    """Wipe last three Cheerlights colors across display ten pixels at a time."""
+    for q in range(3):
+        for head in range(strip.numPixels()+10):
+            if head < strip.numPixels():
+                strip.setPixelColor(head, light_history[q])
+            tail = head - 10
+            if tail >= 0:
+                strip.setPixelColor(tail, Color(0,0,0))
+            strip.show()
+            time.sleep(wait_ms/1000.0)
+
 
 # Main program logic follows:
 if __name__ == '__main__':
