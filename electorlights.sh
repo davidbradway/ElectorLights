@@ -1,21 +1,21 @@
 #!/bin/sh
 
 ### BEGIN INIT INFO
-# Provides:          cheerlights
+# Provides:          electorlights
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Internet connected christmas tree lights
-# Description:       This services watches the Cheerlights web feed and updates the color of my xmas tree lights accordingly
+# Short-Description: Internet connected election result lights
+# Description:       This services watches a web site and updates the color of my NeoPixel lights with the current Electoral College results
 ### END INIT INFO
 
 # see http://blog.scphillips.com/2013/07/getting-a-python-script-to-run-in-the-background-as-a-service-on-boot/
 
 # Change the next 3 lines to suit where you install your script and what you want to call it
-DIR=/home/pi/repos/CheerlightsPi
-DAEMON=$DIR/cheerlights.py
-DAEMON_NAME=cheerlights
+DIR=/home/pi/repos/ElectorLights
+DAEMON=$DIR/electorlights.py
+DAEMON_NAME=electorlights
 
 # Add any command line options for your daemon here
 DAEMON_OPTS=""
