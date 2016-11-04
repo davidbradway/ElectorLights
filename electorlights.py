@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Raspberry Pi Neopixel ElectorLights
+# Raspberry Pi NeoPixel ElectorLights
 # Author: David Bradway
 # 
 # Uses NeoPixel Python library wrapper by Tony DiCola (tony@tonydicola.com)
@@ -49,7 +49,7 @@ def set_democrats(strip, electors, wait_ms=50):
     # We have LED_COUNT number of LEDs to represent them
     # So we use each LED to represent (538 / LED_COUNT) electors
     num_leds_to_change = electors // (538 // LED_COUNT)
-    print("Num LEDS to change " + repr(num_leds_to_change))
+    print("Num LEDs to change " + repr(num_leds_to_change))
     # We can represent the fractional part with the color level
     # We use modulo operator to partially light up the last LED
     remainder_level = electors % (538 // LED_COUNT)
@@ -99,7 +99,7 @@ if __name__ == '__main__':
     if PI:
         # Create NeoPixel object with appropriate configuration.
         my_strip = neopixel.Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT)
-        # Intialize the library (must be called once before other functions).
+        # Initialize the library (must be called once before other functions).
         my_strip.begin()
         reset_all(my_strip)
 
