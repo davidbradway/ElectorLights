@@ -63,9 +63,8 @@ def set_democrats(strip, electors, wait_ms=50):
         # If there is a fractional part, turn it a proportional shade
         if remainder_level > 0:
             strip.setPixelColor(num_leds_to_change,
-                                neopixel.Color(0, 0, math.floor(255 /
-                                                       (538 // LED_COUNT *
-                                                        (remainder_level + 1)))))
+                                neopixel.Color(0, 0, math.floor(remainder_level
+                                                * 255 / (538 // LED_COUNT))))
             strip.show()
             time.sleep(wait_ms/1000.0)
 
@@ -83,8 +82,8 @@ def set_republicans(strip, electors, wait_ms=50):
             time.sleep(wait_ms/1000.0)
         if remainder_level > 0:
             strip.setPixelColor(LED_COUNT - num_leds_to_change,
-                                neopixel.Color(math.floor(255 / (538 // LED_COUNT) *
-                                                 (remainder_level + 1)), 0, 0))
+                                neopixel.Color(math.floor(remainder_level
+                                        * 255 / (538 // LED_COUNT)), 0, 0))
             strip.show()
             time.sleep(wait_ms/1000.0)
 
