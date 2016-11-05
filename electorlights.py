@@ -5,16 +5,18 @@
 # Uses NeoPixel Python library wrapper by Tony DiCola (tony@tonydicola.com)
 #  and NeoPixel/ rpi_ws281x library created by Jeremy Garff.
 
+import sys
 import math
 import time
 from bs4 import BeautifulSoup
 import requests
+import neopixel
 
-PI = True
-TESTING = False
+TESTING = True
 
-if PI:
-    import neopixel
+red = neopixel.Color(255, 0, 0)
+green = neopixel.Color(0, 255, 0)
+blue = neopixel.Color(0, 0, 255)
 
 # LED strip configuration:
 LED_COUNT = 89      # CHANGEME! Number of LED pixels.
@@ -39,8 +41,8 @@ def color_wipe(strip, color, wait_ms=50):
 
 
 def reset_all(strip, wait_ms=50):
-    """Set all pixels to green one at a time"""
-    color_wipe(strip, neopixel.Color(0, 255, 0), wait_ms)
+    """Set all pixels to green"""
+    color_wipe(strip, green, wait_ms)
 
 
 def set_democrats(strip, electors, wait_ms=50):
@@ -48,45 +50,50 @@ def set_democrats(strip, electors, wait_ms=50):
     # There are 538 total possible electors
     # We have LED_COUNT number of LEDs to represent them
     # So we use each LED to represent (538 / LED_COUNT) electors
-    num_leds_to_change = electors // (538 // LED_COUNT)
-    print("Num LEDs to change " + repr(num_leds_to_change))
+    num_leds_to_change = int(electors // int(538 / LED_COUNT))
+    if TESTING:
+        print("Num LEDs to change " + repr(num_leds_to_change))
     # We can represent the fractional part with the color level
     # We use modulo operator to partially light up the last LED
-    remainder_level = electors % (538 // LED_COUNT)
-    print("Remainder " + repr(remainder_level))
-    if PI:
-        for i in range(num_leds_to_change):
-            # Turn these fully blue, one at a time
-            strip.setPixelColor(i, neopixel.Color(0, 0, 255))
-            strip.show()
-            time.sleep(wait_ms/1000.0)
-        # If there is a fractional part, turn it a proportional shade
-        if remainder_level > 0:
-            strip.setPixelColor(num_leds_to_change,
-                                neopixel.Color(0, 0, math.floor(remainder_level
-                                                * 255 / (538 // LED_COUNT))))
-            strip.show()
-            time.sleep(wait_ms/1000.0)
+    remainder_level = int(electors % int(538 / LED_COUNT))
+    if TESTING:
+        print("Remainder " + repr(remainder_level))
+    for i in range(num_leds_to_change):
+        # Turn these fully blue, one at a time
+        strip.setPixelColor(i, blue)
+        strip.show()
+        time.sleep(wait_ms/1000.0)
+    # If there is a fractional part, turn it a proportional shade
+    if remainder_level > 0:
+        fractional_color = int(remainder_level * 255 / 
+                               int(538 / LED_COUNT))
+	strip.setPixelColor(num_leds_to_change,
+                            neopixel.Color(0, 0, fractional_color))
+        strip.show()
+        time.sleep(wait_ms/1000.0)
 
 
 def set_republicans(strip, electors, wait_ms=50):
     """Wipe red in from the right side one pixel at a time."""
-    num_leds_to_change = electors // (538 // LED_COUNT)
-    print("Num LEDS to change " + repr(num_leds_to_change))
-    remainder_level = electors % (538 // LED_COUNT)
-    print("Remainder " + repr(remainder_level))
-    if PI:
-        for i in range(num_leds_to_change):
-            strip.setPixelColor(LED_COUNT-i, neopixel.Color(255, 0, 0))
-            strip.show()
-            time.sleep(wait_ms/1000.0)
-        if remainder_level > 0:
-            strip.setPixelColor(LED_COUNT - num_leds_to_change,
-                                neopixel.Color(math.floor(remainder_level
-                                        * 255 / (538 // LED_COUNT)), 0, 0))
-            strip.show()
-            time.sleep(wait_ms/1000.0)
-
+    num_leds_to_change = int(electors // int(538 / LED_COUNT))
+    if TESTING:
+        print("Num LEDs to change " + repr(num_leds_to_change))
+    # We can represent the fractional part with the color level
+    # We use modulo operator to partially light up the last LED
+    remainder_level = int(electors % int(538 / LED_COUNT))
+    if TESTING:
+        print("Remainder " + repr(remainder_level))
+    for i in range(num_leds_to_change):
+        strip.setPixelColor(LED_COUNT-i, red)
+        strip.show()
+        time.sleep(wait_ms/1000.0)
+    if remainder_level > 0:
+        fractional_color = int(remainder_level * 255 / 
+                               int(538 / LED_COUNT))
+        strip.setPixelColor(LED_COUNT - num_leds_to_change,
+                            neopixel.Color(fractional_color, 0, 0))
+        strip.show()
+        time.sleep(wait_ms/1000.0)
 
 # Last results to check if the results have changed
 dems_last = 0
@@ -96,42 +103,50 @@ reps_last = 0
 # Main program logic follows:
 if __name__ == '__main__':
 
-    if PI:
-        # Create NeoPixel object with appropriate configuration.
-        my_strip = neopixel.Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT)
-        # Initialize the library (must be called once before other functions).
-        my_strip.begin()
-        reset_all(my_strip)
+    # Create NeoPixel object with appropriate configuration.
+    my_strip = neopixel.Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT)
+    # Initialize the library (must be called once before other functions).
+    my_strip.begin()
+    reset_all(my_strip, 0)
 
     print('Press Ctrl-C to quit.')
     while True:
         # Parse a website to find the current totals
         try:
-            print('Scrape')
             if TESTING:
+                print('Scrape')
                 url = 'https://www.random.org/integers/?num=1&min=1&max=270&col=1&base=10&format=plain&rnd=new'
                 r = requests.get(url)
                 dems = r.text
+                dems = int(float(dems))
+                print(dems)
+
                 r = requests.get(url)
                 reps = r.text
+                reps = int(float(reps))
+                print(reps)
             else:
                 r = requests.get(url)
                 soup = BeautifulSoup(r.text, 'html.parser')
                 dems = soup.find(id=dem_id).text
+                dems = int(float(dems))
+
                 reps = soup.find(id=rep_id).text
+                reps = int(float(reps))
 
             if (dems, reps) != (dems_last, reps_last):
                 # New results, do stuff
-                print("Dem electors " + dems)
+                if TESTING:
+                    print("Dem electors " + repr(dems))
                 set_democrats(my_strip, dems)
-                print("Rep electors " + reps)
+                if TESTING:
+                    print("Rep electors " + repr(reps))
                 set_republicans(my_strip, reps)
                 # Save the current totals for when this runs in a loop
                 (dems_last, reps_last) = (dems, reps)
-
         except:
-            print('error')
-            pass
+            print("Unexpected error:", sys.exc_info()[0])
+            raise
         if TESTING:
             time.sleep(5)
         else:
