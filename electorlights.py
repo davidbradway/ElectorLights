@@ -11,6 +11,7 @@ import time
 from bs4 import BeautifulSoup
 import requests
 import neopixel
+import datetime as dt
 
 TESTING = True
 
@@ -25,10 +26,11 @@ LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA = 5       # DMA channel to use for generating signal (try 5)
 LED_INVERT = False   # True to invert the signal (when using NPN transistor level shift)
 
-# Customize this once we find a site with live-updating numbers
-url = 'http://www.270towin.com/'
-dem_id = 'dem_ev'
-rep_id = 'rep_ev'
+timestamp = dt.datetime.now()
+format = "%Y%m%d%H%M%S"
+s = timestamp.strftime(format)
+
+url = 'http://s3.amazonaws.com/origin-east-elections.politico.com/mapdata/2016/US.xml?cachebuster='+s
 
 
 # Define functions which animate LEDs in various ways.
@@ -127,12 +129,16 @@ if __name__ == '__main__':
                 print(reps)
             else:
                 r = requests.get(url)
-                soup = BeautifulSoup(r.text, 'html.parser')
-                dems = soup.find(id=dem_id).text
-                dems = int(float(dems))
+                content = r.text
+                dem_start = '|US1746;Dem;'
+                sub = content[content.find(dem_start) + len(dem_start):]
+                dem_end = sub.find(';')
+                dems = int(sub[:dem_end])
 
-                reps = soup.find(id=rep_id).text
-                reps = int(float(reps))
+                rep_start = '|US8639;GOP;'
+                sub = content[content.find(rep_start) + len(rep_start):]
+                rep_end = sub.find(';')
+                reps = int(sub[:rep_end])
 
             if (dems, reps) != (dems_last, reps_last):
                 # New results, do stuff
