@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # feed test
 # Author: David Bradway (david.bradway@gmail.com)
 #
