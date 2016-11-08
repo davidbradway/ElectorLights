@@ -14,6 +14,7 @@ import neopixel
 import datetime as dt
 
 TESTING = False
+DEBUG = False
 
 red = neopixel.Color(255, 0, 0)
 purple = neopixel.Color(128, 0, 128)
@@ -53,12 +54,12 @@ def set_democrats(strip, electors, wait_ms=50):
     # We have LED_COUNT number of LEDs to represent them
     # So we use each LED to represent (538 / LED_COUNT) electors
     num_leds_to_change = int(electors // int(538 / LED_COUNT))
-    if TESTING:
+    if DEBUG:
         print("Num LEDs to change " + repr(num_leds_to_change))
     # We can represent the fractional part with the color level
     # We use modulo operator to partially light up the last LED
     remainder_level = int(electors % int(538 / LED_COUNT))
-    if TESTING:
+    if DEBUG:
         print("Remainder " + repr(remainder_level))
     for i in range(num_leds_to_change):
         # Turn these fully blue, one at a time
@@ -78,12 +79,12 @@ def set_democrats(strip, electors, wait_ms=50):
 def set_republicans(strip, electors, wait_ms=50):
     """Wipe red in from the right side one pixel at a time."""
     num_leds_to_change = int(electors // int(538 / LED_COUNT))
-    if TESTING:
+    if DEBUG:
         print("Num LEDs to change " + repr(num_leds_to_change))
     # We can represent the fractional part with the color level
     # We use modulo operator to partially light up the last LED
     remainder_level = int(electors % int(538 / LED_COUNT))
-    if TESTING:
+    if DEBUG:
         print("Remainder " + repr(remainder_level))
     for i in range(num_leds_to_change):
         strip.setPixelColor(LED_COUNT-i, red)
@@ -118,18 +119,17 @@ if __name__ == '__main__':
     while True:
         # Parse a website to find the current totals
         try:
-            if TESTING:
+            if DEBUG:
                 print('Scrape')
+            if TESTING:
                 url = 'https://www.random.org/integers/?num=1&min=1&max=270&col=1&base=10&format=plain&rnd=new'
                 r = requests.get(url)
                 dems = r.text
                 dems = int(float(dems))
-                print(dems)
 
                 r = requests.get(url)
                 reps = r.text
                 reps = int(float(reps))
-                print(reps)
             else:
                 r = requests.get(url)
                 content = r.text
@@ -145,10 +145,10 @@ if __name__ == '__main__':
 
             if (dems, reps) != (dems_last, reps_last):
                 # New results, do stuff
-                if TESTING:
+                if DEBUG:
                     print("Dem electors " + repr(dems))
                 set_democrats(my_strip, dems)
-                if TESTING:
+                if DEBUG:
                     print("Rep electors " + repr(reps))
                 set_republicans(my_strip, reps)
                 # Save the current totals for when this runs in a loop
