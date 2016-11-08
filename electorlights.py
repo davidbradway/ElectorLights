@@ -70,7 +70,7 @@ def set_democrats(strip, electors, wait_ms=50):
     if remainder_level > 0:
         fractional_color = int(remainder_level * 255 / 
                                int(538 / LED_COUNT))
-	strip.setPixelColor(num_leds_to_change,
+        strip.setPixelColor(num_leds_to_change,
                             neopixel.Color(0, 0, fractional_color))
         strip.show()
         time.sleep(wait_ms/1000.0)
