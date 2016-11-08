@@ -31,7 +31,6 @@ LED_INVERT = False   # True to invert the signal (when using NPN transistor leve
 timestamp = dt.datetime.now()
 format = "%Y%m%d%H%M%S"
 s = timestamp.strftime(format)
-
 url = 'http://s3.amazonaws.com/origin-east-elections.politico.com/mapdata/2016/US.xml?cachebuster='+s
 
 
