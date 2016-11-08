@@ -24,4 +24,5 @@ sudo update-rc.d electorlights.sh defaults
 echo " "
 
 echo "Run a script every minute to check if the processes needs respawned"
-(sudo crontab -l ; echo "* * * * * /home/pi/repos/ElectorLights/autorestart.sh")| sudo crontab -
+long_str="* * * * * $(pwd)/autorestart.sh"
+(sudo crontab -l ; echo "$long_str")| sudo crontab -
