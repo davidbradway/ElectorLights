@@ -28,12 +28,13 @@ LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA = 5       # DMA channel to use for generating signal (try 5)
 LED_INVERT = False   # True to invert the signal (when using NPN transistor level shift)
 
-timestamp = dt.datetime.now()
-format = "%Y%m%d%H%M%S"
-s = timestamp.strftime(format)
-url = 'http://s3.amazonaws.com/origin-east-elections.politico.com/mapdata/2016/US.xml?cachebuster='+s
-
-
+# timestamp = dt.datetime.now()
+# format = "%Y%m%d%H%M%S"
+# s = timestamp.strftime(format)
+# url = 'http://s3.amazonaws.com/origin-east-elections.politico.com/mapdata/2016/US.xml?cachebuster='+s
+url = 'http://data.cnn.com/ELECTION/2016/bop/p.json'                
+# print(url)                                                        
+                                                                    
 # Define functions which animate LEDs in various ways.
 def color_wipe(strip, color, wait_ms=50):
     """Wipe color across display a pixel at a time."""
@@ -133,16 +134,10 @@ if __name__ == '__main__':
                 reps = int(float(reps))
             else:
                 r = requests.get(url)
-                content = r.text
-                dem_start = '|US1746;Dem;'
-                sub = content[content.find(dem_start) + len(dem_start):]
-                dem_end = sub.find(';')
-                dems = int(sub[:dem_end])
+                content = r.json()
+                dems = int(content['candidates'][1]['evotes'])
 
-                rep_start = '|US8639;GOP;'
-                sub = content[content.find(rep_start) + len(rep_start):]
-                rep_end = sub.find(';')
-                reps = int(sub[:rep_end])
+                reps = int(content['candidates'][0]['evotes'])
 
             if (dems, reps) != (dems_last, reps_last):
                 # New results, do stuff
