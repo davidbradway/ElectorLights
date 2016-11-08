@@ -16,7 +16,7 @@ import datetime as dt
 TESTING = False
 
 red = neopixel.Color(255, 0, 0)
-green = neopixel.Color(0, 255, 0)
+purple = neopixel.Color(128, 0, 128)
 blue = neopixel.Color(0, 0, 255)
 
 # LED strip configuration:
@@ -44,7 +44,7 @@ def color_wipe(strip, color, wait_ms=50):
 
 def reset_all(strip, wait_ms=50):
     """Set all pixels to green"""
-    color_wipe(strip, green, wait_ms)
+    color_wipe(strip, purple, wait_ms)
 
 
 def set_democrats(strip, electors, wait_ms=50):
@@ -109,8 +109,11 @@ if __name__ == '__main__':
     my_strip = neopixel.Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT)
     # Initialize the library (must be called once before other functions).
     my_strip.begin()
+    # Initialize the pixels to purple
     reset_all(my_strip, 0)
-
+    # Make the middle pixel white to show the winning line
+    my_strip.setPixelColor(int(math.ceil(LED_COUNT/2.)-1), neopixel.Color(255,255,255))
+    my_strip.show()
     print('Press Ctrl-C to quit.')
     while True:
         # Parse a website to find the current totals
