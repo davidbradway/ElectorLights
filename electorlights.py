@@ -13,7 +13,7 @@ import requests
 import neopixel
 import datetime as dt
 
-TESTING = True
+TESTING = False
 
 red = neopixel.Color(255, 0, 0)
 green = neopixel.Color(0, 255, 0)
