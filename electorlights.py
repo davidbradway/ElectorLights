@@ -19,6 +19,7 @@ DEBUG = False
 red = neopixel.Color(255, 0, 0)
 purple = neopixel.Color(128, 0, 128)
 blue = neopixel.Color(0, 0, 255)
+white = neopixel.Color(255,255,255)
 
 # LED strip configuration:
 LED_COUNT = 89      # CHANGEME! Number of LED pixels.
@@ -113,7 +114,8 @@ if __name__ == '__main__':
     # Initialize the pixels to purple
     reset_all(my_strip, 0)
     # Make the middle pixel white to show the winning line
-    my_strip.setPixelColor(int(math.ceil(LED_COUNT/2.)-1), neopixel.Color(255,255,255))
+    middle_pixel = int(math.ceil(LED_COUNT/2.)-1)
+    my_strip.setPixelColor(middle_pixel, white)
     my_strip.show()
     print('Press Ctrl-C to quit.')
     while True:
