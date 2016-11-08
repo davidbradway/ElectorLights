@@ -99,8 +99,8 @@ def set_republicans(strip, electors, wait_ms=50):
         time.sleep(wait_ms/1000.0)
 
 # Last results to check if the results have changed
-dems_last = 0
-reps_last = 0
+dems_last = -1
+reps_last = -1
 
 
 # Main program logic follows:
