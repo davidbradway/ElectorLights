@@ -3,9 +3,17 @@ ElectorLights
 
 Use Adafruit NeoPixels and a RaspberryPi to display the current Electoral College results.
 
+## Get the Code
+
 Clone or download this project at [Github](https://github.com/davidbradway/ElectorLights).
 
-## Desription
+## Images of ElectorLights in action
+
+![Before](Before.jpg "Before")<br> Before any states were called.
+
+![After](After.jpg "After")<br> After the election was decided.
+
+## Acknowledgement and Hardware Setup
 
 Thanks to Tony DiCola's Python wrapper for the the excellent rpi_ws281x library created by Jeremy Garff, I can control the NeoPixels on the Raspberry Pi.
 
