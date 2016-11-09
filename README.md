@@ -26,7 +26,7 @@ Thanks to Tony DiCola's Python wrapper for the the excellent rpi_ws281x library 
     sudo python rpi_ws281x/python/examples/strandtest.py
 
 ## Test the feed
-    python test_feed.py
+    python test_feed_cnn.py
 
 ## Usage
     sudo python electorlights.py
