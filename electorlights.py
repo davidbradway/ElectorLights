@@ -88,7 +88,7 @@ def set_republicans(strip, electors, wait_ms=50):
     if DEBUG:
         print("Remainder " + repr(remainder_level))
     for i in range(num_leds_to_change):
-        strip.setPixelColor(LED_COUNT-i, red)
+        strip.setPixelColor(LED_COUNT-1-i, red)
         strip.show()
         time.sleep(wait_ms/1000.0)
     if remainder_level > 0:
